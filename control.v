@@ -1,6 +1,6 @@
 module control
 (
-    input[2:0] opcode,
+    input[5:0] opcode,
     input reset,
     output reg[1:0] reg_dst, mem_to_reg, alu_op,
     output reg jump, branch, mem_read, mem_write, alu_src, reg_write, sign_or_zero
@@ -22,11 +22,11 @@ begin
     end
     else begin
         case(opcode)
-        3'b000://add 
+        6'b000000://add, sub, slt, and, or
             begin
                 reg_dst = 2'b01;
                 mem_to_reg=2'b00;
-                alu_op=2'b00;
+                alu_op=2'b10;
                 jump=1'b0;
                 branch=1'b0;
                 mem_read=1'b0;
@@ -35,20 +35,7 @@ begin
                 reg_write=1'b1;
                 sign_or_zero=1'b1;
             end
-        3'b001:
-             begin//sli
-                reg_dst=2'b00;
-                mem_to_reg=2'b00;
-                alu_op=2'b00;
-                jump=1'b1;
-                branch=1'b0;
-                mem_read=1'b0;
-                mem_write=1'b0;
-                alu_src=1'b0;
-                reg_write=1'b1;
-                sign_or_zero=1'b1;
-            end
-        3'b010:
+        6'b000010:
             begin//j
                 reg_dst=2'b00;
                 mem_to_reg=2'b00;
@@ -61,20 +48,7 @@ begin
                 reg_write=1'b0;
                 sign_or_zero=1'b1;
             end
-        3'b011:
-            begin//jal
-                reg_dst=2'b10;
-                mem_to_reg=2'b10;
-                alu_op=2'b00;
-                jump=1'b1;
-                branch=1'b0;
-                mem_read=1'b0;
-                mem_write=1'b0;
-                alu_src=1'b0;
-                reg_write=1'b1;
-                sign_or_zero=1'b1;
-            end
-        3'b100: 
+        4'b100011: 
             begin//lw
                 reg_dst=2'b00;
                 mem_to_reg=2'b01;
@@ -87,7 +61,7 @@ begin
                 reg_write=1'b1;
                 sign_or_zero=1'b1;
             end
-        3'b101: 
+        6'b101011: 
             begin//sw
                 reg_dst=2'b00;
                 mem_to_reg=2'b00;
@@ -100,7 +74,7 @@ begin
                 reg_write=1'b0;
                 sign_or_zero=1'b1;
             end
-        3'b111: 
+        6'b001000: 
             begin//addi
                 reg_dst=2'b00;
                 mem_to_reg=2'b00;
